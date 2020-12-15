@@ -82,11 +82,11 @@ async function main() {
         if (isCategoryRow) {
           currentCategory = row.innerText;
         } else {
-          result.push(brandDomToJson({ row, currentCategory }));
+          result.push(domToJson({ row, currentCategory }));
         }
       });
 
-      function brandDomToJson({ row, currentCategory }) {
+      function domToJson({ row, currentCategory }) {
         const childs = row.childNodes;
         return {
           category: (
