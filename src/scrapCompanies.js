@@ -1,14 +1,5 @@
 // const puppeteer = require("puppeteer");
 
-// (async () => {
-//   const browser = await puppeteer.launch();
-//   const page = await browser.newPage();
-//   await page.goto("https://example.com");
-//   await page.screenshot({ path: "example.png" });
-
-//   await browser.close();
-// })();
-
 const fs = require("fs");
 const path = require("path");
 const puppeteer = require("puppeteer-core");
@@ -16,22 +7,19 @@ const executablePath =
   "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
 
 const url = "http://www.tsetmc.com/Loader.aspx?ParTree=15131F";
-// const { brandDomToJson } = require("./utils/domUtils.js");
 
 main();
 
 async function main() {
   const browser = await puppeteer.launch({
     executablePath,
-    headless: false,
+    // headless: false,
     args: ["--no-sandbox"],
   });
   const page = await browser.newPage();
   await page.goto(url, {
     waitUntil: "networkidle2",
   });
-
-  // await page.exposeFunction("brandDomToJson", brandDomToJson);
 
   const companies = await page.evaluate(() => {
     const result = [];
