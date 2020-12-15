@@ -12,7 +12,7 @@ main();
 async function main() {
   const browser = await puppeteer.launch({
     executablePath,
-    headless: false,
+    // headless: false,
     args: ["--no-sandbox"],
   });
   const page = await browser.newPage();
@@ -87,7 +87,6 @@ async function main() {
       });
 
       function brandDomToJson({ row, currentCategory }) {
-        console.log("row", row);
         const childs = row.childNodes;
         return {
           category: (
@@ -100,14 +99,14 @@ async function main() {
           volume: childs[3].innerText,
           value: childs[4].innerText,
           lastDay: childs[5].innerText,
-          first1: childs[6].innerText,
-          amount1: childs[7].innerText,
+          first: childs[6].innerText,
           lastTrade: {
+            amount: childs[7].innerText,
             change: childs[8].innerText,
             percent: childs[9].innerText,
           },
-          amount2: childs[10].innerText,
           lastPrice: {
+            amount: childs[10].innerText,
             change: childs[11].innerText,
             percent: childs[12].innerText,
           },
@@ -115,9 +114,9 @@ async function main() {
           max: childs[14].innerText,
           EPS: childs[15].innerText,
           PE: childs[16].innerText,
-          count2: childs[17].innerText,
-          volume2: childs[18].innerText,
           buy: {
+            count: childs[17].innerText,
+            volume: childs[18].innerText,
             price: childs[19].innerText,
           },
           sell: {
@@ -134,18 +133,18 @@ async function main() {
       console.log("Error in evaluate companies.");
     });
 
-  console.log(`companies (count: ${companies.data.length}):`, companies.data);
+  console.log(`companies  count: ${companies.data.length}`);
 
-  fs.writeFileSync(
+  fs.writeFile(
     path.join(__dirname, "..", "dist", "companies.json"),
     JSON.stringify(companies, null, 2),
     "utf8",
     (err) => {
       if (err) {
         console.error("could not save companies to file.");
-        return;
+      } else {
+        console.log("Done.");
       }
-      console.log("Done.");
     }
   );
 
