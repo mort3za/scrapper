@@ -10,5 +10,8 @@
   "scripts": {
     "start": "node ./src/scrapCompanies.js",
     "scrapCompanies": "node ./src/scrapCompanies.js"
+  },
+  "engines": {
+    "node": "12.x"
   }
 }

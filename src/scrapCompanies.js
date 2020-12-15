@@ -3,10 +3,10 @@
 const fs = require("fs");
 const path = require("path");
 const puppeteer = require("puppeteer-core");
-const url = "http://www.tsetmc.com/Loader.aspx?ParTree=15131F";
 
 require("./env.js");
 const executablePath = process.env.chrome_path;
+const url = process.env.companies_url;
 main();
 
 async function main() {
@@ -134,6 +134,10 @@ async function main() {
     });
 
   console.log(`companies  count: ${companies.data.length}`);
+
+  fs.mkdir(path.join(__dirname, "..", "dist"), { recursive: true }, (err) => {
+    if (err) throw err;
+  });
 
   fs.writeFile(
     path.join(__dirname, "..", "dist", "companies.json"),
