@@ -1,12 +1,12 @@
 // const puppeteer = require("puppeteer");
 
-const puppeteer = require("puppeteer-core");
 const { writeToJson } = require("./utils/helpers.js");
+const puppeteer = require("puppeteer-core");
 
 require("./env.js");
 const executablePath = process.env.chrome_path;
-const url = process.env.shareholders_1;
-
+const urlIndex = process.env.urlindex;
+const url = process.env[`shareholders_${urlIndex}`];
 main();
 
 async function main() {
@@ -57,9 +57,11 @@ async function main() {
       return { data: result };
     })
     .then((response) => {
-      console.log("response", response);
-      // console.log(`shareholders  count: ${shareholders.data.length}`);
-      writeToJson({ filename: "shareholders.json", data: response });
+      // console.log("response", response);
+      writeToJson({
+        filename: `shareholders_${urlIndex}.json`,
+        data: response,
+      });
       return response;
     })
     .catch((err) => {

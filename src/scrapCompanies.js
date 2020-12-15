@@ -1,7 +1,6 @@
 // const puppeteer = require("puppeteer");
 
-const fs = require("fs");
-const path = require("path");
+const { writeToJson } = require("./utils/helpers.js");
 const puppeteer = require("puppeteer-core");
 
 require("./env.js");
@@ -16,11 +15,13 @@ async function main() {
     args: ["--no-sandbox"],
   });
   const page = await browser.newPage();
+  // page.on("console", (consoleObj) => console.log(consoleObj.text()));
+
   await page.goto(url, {
     waitUntil: "networkidle2",
   });
 
-  const companies = await page
+  await page
     .evaluate(() => {
       const result = [];
       const categories = [
@@ -129,28 +130,14 @@ async function main() {
 
       return { data: result };
     })
+    .then((response) => {
+      console.log("response", response);
+      writeToJson({ filename: "companies.json", data: response });
+      return response;
+    })
     .catch((err) => {
       console.log("Error in evaluate companies.");
     });
-
-  console.log(`companies  count: ${companies.data.length}`);
-
-  fs.mkdir(path.join(__dirname, "..", "dist"), { recursive: true }, (err) => {
-    if (err) throw err;
-  });
-
-  fs.writeFile(
-    path.join(__dirname, "..", "dist", "companies.json"),
-    JSON.stringify(companies, null, 2),
-    "utf8",
-    (err) => {
-      if (err) {
-        console.error("could not save companies to file.");
-      } else {
-        console.log("Done.");
-      }
-    }
-  );
 
   await browser.close();
 }
