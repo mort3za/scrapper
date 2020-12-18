@@ -30,8 +30,12 @@ async function main() {
         document.querySelectorAll(".content .table1 tbody > tr")
       );
 
+      let shareHolder = "";
       brandRows.forEach((row) => {
-        result.push(domToJson({ row }));
+        const childs = row.childNodes;
+        const rowTitle = (childs[0].querySelector("div a") || {}).innerText;
+        shareHolder = rowTitle || shareHolder;
+        result.push(domToJson({ row, shareHolder }));
       });
 
       function numberCleaner(input) {
@@ -39,10 +43,10 @@ async function main() {
         return Number(cleanedupExtraChars);
       }
 
-      function domToJson({ row }) {
+      function domToJson({ row, shareHolder }) {
         const childs = row.childNodes;
         return {
-          name: (childs[0].querySelector("div a") || {}).innerText,
+          shareHolder,
           company: (childs[0].querySelector("li") || {}).innerText,
           change: {
             value: numberCleaner(childs[1].childNodes[0].textContent),
